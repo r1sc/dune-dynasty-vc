@@ -1,0 +1,7 @@
+1. git clone https://github.com/Microsoft/vcpkg.git --depth 1
+2. .\vcpkg\bootstrap-vcpkg.bat
+3. .\vcpkg\vcpkg install allegro5:x86-windows enet:x86-windows
+4. cmake -DWITH_ENET=ON -DWITH_ACODEC=ON -S . -B build -A Win32
+
+Now open build\dunedynasty.sln and build the "dunedynasty" project.
+To debug in VS, you need to set the working directory to the "dist" folder. Right click dunedynasty -> Properties -> Debugging -> Working Directory.
