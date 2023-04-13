@@ -20,6 +20,7 @@
 # ifdef __PANDORA__
 #  include <GLES/gl.h>
 # else
+#include <Windows.h>
 #  include <GL/gl.h>
 # endif /* __PANDORA__ */
 #endif /* __APPLE__ */

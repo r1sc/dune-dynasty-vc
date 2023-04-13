@@ -98,7 +98,7 @@ MPU_ThreadProc(ALLEGRO_THREAD *thread, void *arg0)
 {
 	const uint32 size = MPU_GetDataSize();
 	MPUThreadArg *arg = (MPUThreadArg *)arg0;
-	uint8 musicBuffer_buffer[size];
+	uint8 *musicBuffer_buffer = new uint8[size];
 	uint16 musicBuffer_index = MPU_SetData(arg->data, arg->mid->track, musicBuffer_buffer);
 	MPU_Play(musicBuffer_index);
 	MPU_SetVolume(musicBuffer_index, 100 * music_volume, 0);
@@ -122,6 +122,7 @@ MPU_ThreadProc(ALLEGRO_THREAD *thread, void *arg0)
 
 	MPU_Uninit();
 	delete[] arg->data;
+	delete[] musicBuffer_buffer;
 	delete arg;
 
 	al_destroy_event_queue(queue);
@@ -136,14 +137,14 @@ MPU_ThreadProc(ALLEGRO_THREAD *thread, void *arg0)
 static void
 AudioA5_DisableMusicSet(enum MusicSet music_set)
 {
-	for (int musicID = MUSIC_STOP; musicID < MUSICID_MAX; musicID++) {
+	/*for (int musicID = MUSIC_STOP; musicID < MUSICID_MAX; musicID++) {
 		MusicList *l = &g_table_music[musicID];
 
 		for (int s = 0; s < l->length; s++) {
 			if (l->song[s].music_set == music_set)
 				l->song[s].enable &=~MUSIC_FOUND;
 		}
-	}
+	}*/
 }
 
 void
@@ -182,14 +183,14 @@ AudioA5_Init(void)
 #endif
 
 	/* Initialise MIDI player. */
-	if (g_table_music_set[MUSICSET_DUNE2_MIDI].enable)
-		enable_midi = midi_init();
+	/*if (g_table_music_set[MUSICSET_DUNE2_MIDI].enable)
+		enable_midi = midi_init();*/
 
 	if (!enable_midi)
 		AudioA5_DisableMusicSet(MUSICSET_DUNE2_MIDI);
 
 	/* Initialise FluidSynth. */
-	if (g_table_music_set[MUSICSET_FLUIDSYNTH].enable && (sound_font_path[0] != '\0')) {
+	/*if (g_table_music_set[MUSICSET_FLUIDSYNTH].enable && (sound_font_path[0] != '\0')) {
 		s_fluid_player = create_midi_player(sound_font_path);
 
 #ifdef WITH_FLUIDSYNTH
@@ -198,7 +199,7 @@ AudioA5_Init(void)
 #endif
 	} else {
 		s_fluid_player = NULL;
-	}
+	}*/
 
 	if (s_fluid_player == NULL) {
 		AudioA5_DisableMusicSet(MUSICSET_FLUIDSYNTH);
@@ -442,8 +443,8 @@ AudioA5_InitAdlibMusic(const MusicInfo *mid)
 static void
 AudioA5_InitAdlibEffects(void)
 {
-	if (s_effect_stream == NULL)
-		s_effect_stream = AudioA5_InitAdlib(&g_table_music[MUSIC_IDLE1].song[0]);
+	/*if (s_effect_stream == NULL)
+		s_effect_stream = AudioA5_InitAdlib(&g_table_music[MUSIC_IDLE1].song[0]);*/
 }
 
 static void
